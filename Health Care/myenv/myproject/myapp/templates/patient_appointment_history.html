@@ -1,0 +1,40 @@
+{% extends "header.html" %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Appointment History</h2>
+
+  <table class="table table-bordered">
+    <tr style="background:#007bff; color:white;">
+      <th>#</th>
+      <th>Doctor</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Category</th>
+      <th>Symptoms</th>
+      <th>Status</th>
+      <th>Payment</th>
+    </tr>
+
+    {% for a in appointments %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ a.doctor.dname }}</td>
+      <td>{{ a.date }}</td>
+      <td>{{ a.time }}</td>
+      <td>{{ a.category }}</td>
+      <td>{{ a.symptoms }}</td>
+      <td>{{ a.status }}</td>
+      <td>
+        {% if a.payment_status %}
+          <span class="text-success font-weight-bold">Paid</span>
+        {% else %}
+          <span class="text-danger font-weight-bold">Unpaid</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

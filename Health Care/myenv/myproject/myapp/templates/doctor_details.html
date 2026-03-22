@@ -1,0 +1,117 @@
+{% extends 'dheader.html' %}
+{% load static %}
+{% block content %}
+  </div>
+
+  <!-- contact section -->
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Add-Profile
+        </h2>
+      </div>
+
+      {% if msg %}
+        <div class="alert alert-danger" role="alert" style="padding: 20px;">
+            {{msg}}
+        </div>
+        {% elif msg %}
+        <div class="alert alert-success" role="alert">
+            {{msg}}
+        </div>
+      {% endif %}
+        
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container contact-form">
+            <!-- START: Only one form now -->
+            <form class="form-contact contact_form" action="{% url 'doctor_details' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <div class="row">
+
+                  
+
+                  <br><br><br><br>
+
+                  <div class="col-sm-7">
+                      <div class="form-group">
+                          <!-- visible field (for display) -->
+                        <input class="form-control valid" type="text" value="{{ request.session.name }}" readonly>
+                        <!-- hidden field (for backend POST) -->
+                        <input type="hidden" name="dname" value="{{ request.session.name }}">
+                      </div>
+                  </div>
+
+                  <div class="col-sm-7">
+                      <div class="form-group">
+                        <input class="form-control valid" type="email" value="{{ request.session.email }}" readonly>
+                        <input type="hidden" name="demail" value="{{ request.session.email }}">
+                      </div>
+                  </div>
+                  <div class="row">
+                  <div class="col-sm-7">
+                      <select name="cchoice">
+                          <option value="" disabled selected>Select Doctor Category</option>
+                          <option value="Dermatologist">Dermatologist</option>
+                          <option value="Neurologist">Neurologist</option>
+                           <option value="Surgeon">Surgeon</option>
+                           <option value="Immunology">Immunology</option>
+                      </select>
+                  </div>
+                  <div class="col-7">
+                      <div class="form-group">
+                          <input class="form-control" name="charges" type="number" placeholder="Enter Charges per hour" required>
+                      </div>
+                  </div>
+
+                  <div class="col-7">
+                      <div class="form-group">
+                          <input class="form-control" name="qfc" type="text" placeholder="Enter Qualification " required>
+                      </div>
+                  </div>
+
+                  <div class="col-7">
+                      <div class="form-group">
+                          <input class="form-control" name="exp" type="number" placeholder="Enter Experience" required>
+                      </div>
+                  </div>
+
+                  <div class="col-7">
+                      <div class="form-group">
+                          <label>Start Time</label>
+                          <input class="form-control" name="start_time" type="time" placeholder="Enter Start time " required>
+                      </div>
+                  </div>
+
+                  <div class="col-7">
+
+                      <div class="form-group">
+                          <label>End Time</label>
+                          <input class="form-control" name="end_time" type="time" placeholder="Enter End time " required>
+                      </div>
+                  </div>
+
+                  <div class="col-12">
+                        <div class="form-group">
+                            <textarea name="address" id="" class="form-control" rows="3" placeholder="Enter Address"></textarea>
+                        </div>
+                  </div>
+              </div>
+
+              <div class="form-group mt-3">
+                  <button type="submit" class="button button-contactForm boxed-btn">Add-Profile</button>
+              </div>
+            </form>
+            <!-- END: Only one form now -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end contact section -->
+
+  <!-- footer section -->
+
+{% endblock %}

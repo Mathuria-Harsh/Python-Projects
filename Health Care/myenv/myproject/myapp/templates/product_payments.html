@@ -1,0 +1,25 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Buyer</th>
+            <th>Price</th>
+            <th>Payment ID</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for p in payments %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.buyer.name }}</td>
+            <td>₹{{ p.price }}</td>
+            <td>{{ p.payment_id }}</td>
+            <td>{{ p.payment_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

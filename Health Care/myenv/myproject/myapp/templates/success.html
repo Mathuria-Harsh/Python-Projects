@@ -1,0 +1,61 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<section class="contact_section layout_padding" style="padding-top: 120px; min-height: 80vh;">
+    <div class="container text-center">
+        
+        <div class="heading_container mb-5">
+            <h2 style="color: #28a745; font-weight: 700;">✅ Payment Successful!</h2>
+            <p class="mt-3" style="font-size: 18px; color: #555;">
+                Your payment is successfull
+            </p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="card p-4 shadow-lg" style="border-radius: 12px; border: 1px solid #e9ecef;">
+                    <h4 class="mb-4" style="color: #1a73e8;">Appointment & Payment Details</h4>
+                    
+                    <ul class="list-group list-group-flush text-left">
+                        <li class="list-group-item">
+                            <strong>Patient Name:</strong> {{ patient.pname }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Doctor:</strong> {{ patient.doctor.dname }} 
+                        </li>
+                        <li class="list-group-item">
+                            <strong>date:</strong> {{ patient.date }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>time:</strong> {{ patient.time }}
+                        </li>
+
+                        <li class="list-group-item" style="background-color: #f8f9fa;">
+                            <strong>payment ID (Txn ID):</strong> {{ patient.payment_id }} 
+                        </li>
+                        <li class="list-group-item" style="background-color: #f8f9fa;">
+                            <strong>order ID:</strong> {{ order_id }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Status:</strong> Confirmed
+                        </li>
+                    </ul>
+
+                    <p class="mt-4" style="color: #6c757d;">
+                        A confirmation email will be sent to your registered email address shortly.
+                    </p>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'index' %}" class="btn btn-primary" style="background: #1565c0; border:none;">
+                            Go To Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

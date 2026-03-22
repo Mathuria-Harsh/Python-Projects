@@ -1,0 +1,81 @@
+{% extends "dheader.html" %}
+{% block content %}
+
+<style>
+    .edit-container {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .edit-container h2 {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        margin-bottom: 15px;
+        border-radius: 8px;
+        height: 45px;
+        border: 1px solid #ccc;
+    }
+
+    textarea.form-control {
+        height: 120px;
+        resize: none;
+    }
+
+    .preview-img {
+        width: 150px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border: 2px solid #ddd;
+    }
+
+    .btn-primary {
+        width: 100%;
+        border-radius: 8px;
+        height: 45px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="edit-container">
+    <h2>Edit Product</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label><b>Name</b></label>
+        <input type="text" name="name" value="{{ product.name }}" class="form-control">
+
+        <label><b>Price</b></label>
+        <input type="text" name="price" value="{{ product.price }}" class="form-control">
+
+        <label><b>Description</b></label>
+        <textarea name="description" class="form-control">{{ product.description }}</textarea>
+
+        <label><b>Current Image</b></label><br>
+        <img src="{{ product.image.url }}" id="preview" class="preview-img"><br>
+
+        <label><b>Change Image</b></label>
+        <input type="file" name="image" class="form-control" accept="image/*" onchange="loadFile(event)">
+
+        <button class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+<script>
+    // Image Preview Code
+    function loadFile(event) {
+        let img = document.getElementById("preview");
+        img.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<script>
+    window.onload = function () {
+        const section = document.getElementById("forgot-pass");
+        if(section){
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+</script>
+
+<section id="forgot-pass" class="contact_section layout_padding" style="padding-top: 120px;">
+    <div class="container">
+        
+        <div class="heading_container text-center mb-5">
+            <h2>Forgot Password</h2>
+            <p class="mt-2">Enter your registered email address to receive an OTP</p>
+        </div>
+        <!-- Error Message -->
+        {% if msg %}
+          <div class="alert alert-danger text-center" role="alert" style="padding: 15px; font-size: 16px;">
+            {{ msg }}
+          </div>
+        {% endif %}
+
+        <!-- Form Box -->
+        <div class="form_container p-4 shadow-lg rounded-4 bg-white">
+
+          <form action="{% url 'fpass' %}" method="POST" class="form-contact contact_form">
+            {% csrf_token %}
+
+            <!-- Email Input -->
+            <div class="form-group mb-4">
+              <input class="form-control form-control-lg"
+                     name="email"
+                     type="email"
+                     placeholder="Enter your email address"
+                     required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <button type="submit"
+                      class="btn btn-primary btn-lg px-5 py-2 rounded-pill shadow-sm"
+                      style="background: #1565c0; border: none;">
+                Send OTP
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

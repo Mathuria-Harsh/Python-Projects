@@ -1,0 +1,40 @@
+{% extends "dheader.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2>Your Products</h2>
+
+    {% if data %}
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price (₹)</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in data %}
+            <tr>
+                <td><img src="{{ p.image.url }}" width="100" style="border-radius:8px;"></td>
+                <td>{{ p.name }}</td>
+                <td>₹ {{ p.price }}</td>
+                <td>{{ p.description }}</td>
+                <td>
+                    <a href="{% url 'product_edit' p.id %}" class="btn btn-warning btn-sm me-1">Edit</a>
+                    <a href="{% url 'product_delete' p.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="text-center mt-3">You have not added any products yet.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

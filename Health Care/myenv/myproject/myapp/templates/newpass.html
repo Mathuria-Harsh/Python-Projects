@@ -1,0 +1,115 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+  </div>
+
+  <!-- contact section -->
+  <section id="reset-pass" class="contact_section layout_padding" style="padding-top: 120px;">
+    <div class="container">
+        
+        <div class="heading_container text-center mb-5">
+            <h2>Reset Password</h2>
+            <p class="mt-2">Enter your new password below</p>
+        </div>
+
+
+      {% if msg %}
+        <div class="alert alert-danger" role="alert" style="padding: 20px;">
+            {{msg}}
+        </div>
+      {% endif %}
+        
+     
+          <div class="form_container p-4 shadow-lg rounded-4 bg-white">
+
+            <form class="form-contact contact_form" action="{% url 'newpass' %}" method="POST">
+              {% csrf_token %}
+
+              
+                <div class="form-group mb-3 position-relative">
+                  <input class="form-control form-control-lg" id="npassword" name="npassword" type="password" placeholder="Enter New Password" required>
+                  <span class="toggle-password" onclick="togglePassword('npassword', this)">👁️</span>
+                </div>
+                <div class="form-group mb-4 position-relative">
+                    <input class="form-control form-control-lg" id="cnpassword" name="cnpassword" type="password" placeholder="Confirm New Password" required oninput="checkPasswordMatch()">
+                    <span class="toggle-password" onclick="togglePassword('cnpassword', this)">👁️</span>
+                </div>
+             
+                 <small id="passwordMsg" style="font-weight: 500; display: block; margin-top: -10px; margin-bottom: 15px; text-align: left;"></small>
+             
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2 rounded-pill shadow-sm" style="background: #1565c0; border:none;">
+                      Update Password
+                    </button>
+                </div>
+            </form>
+            <!-- END FORM -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end contact section -->
+
+
+  <!-- JS for Password Match & Show/Hide -->
+<script>
+  // Password Match Validation
+  function checkPasswordMatch() {
+    const password = document.getElementById("npassword").value;
+    const cpassword = document.getElementById("cnpassword").value;
+    const msg = document.getElementById("passwordMsg");
+
+    if (cpassword === "") {
+      msg.textContent = "";
+      return;
+    }
+
+    if (password === cpassword) {
+      msg.textContent = "✅ Passwords match";
+      msg.style.color = "green";
+    } else {
+      msg.textContent = "❌ Passwords do not match";
+      msg.style.color = "red";
+    }
+  }
+
+  // Show/Hide Password
+  function togglePassword(fieldId, icon) {
+    const field = document.getElementById(fieldId);
+    if (field.type === "password") {
+      field.type = "text";
+      icon.textContent = "🙈";
+    } else {
+      field.type = "password";
+      icon.textContent = "👁️";
+    }
+  }
+ // Auto Scroll Script 
+ window.onload = function () {
+        const section = document.getElementById("reset-pass");
+        if(section){
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+</script>
+
+
+<!-- Eye Icon Styling -->
+<style>
+  .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 22px;
+    color: #555;
+    user-select: none;
+  }
+  .toggle-password:hover {
+    color: #1565c0;
+  }
+</style>
+
+{% endblock %}

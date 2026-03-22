@@ -1,0 +1,242 @@
+{% extends "dheader.html" %}
+{% block content %}
+
+<style>
+
+/* --------------------- TABLE VIEW (Desktop) --------------------- */
+.table-container {
+    width: 95%;
+    margin: 20px auto;
+    overflow-x: auto;
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.08);
+}
+
+.table-custom th {
+    background: #007bff;
+    color: white;
+    padding: 12px;
+    text-align: center;
+}
+
+.table-custom td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-custom tr:hover {
+    background: #f5f7ff;
+}
+
+/* Status Tags */
+.status-tag {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.status-confirmed { background: #d1ffd6; color: #0b8a1f; }
+.status-accepted { background: #d8e7ff; color: #0053c7; }
+.status-cancelled { background: #ffd4d4; color: #d00000; }
+.status-pending { background: #efefef; color: #707070; }
+
+/* Payment tags */
+.pay-tag {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.paid { background: #d1ffd6; color: #0b8a1f; }
+.unpaid { background: #ffd4d4; color: #d00000; }
+
+/* Buttons */
+.btn-action {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-accept { background: #007bff; color: white; }
+.btn-accept:hover { background: #0056d2; }
+
+.btn-cancel { background: #ff3b3b; color: white; }
+.btn-cancel:hover { background: #d00000; }
+
+/* --------------------- MOBILE CARD VIEW --------------------- */
+
+.card-box {
+    display: none;
+    background: white;
+    border-radius: 15px;
+    padding: 18px;
+    margin: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.10);
+}
+
+.card-line {
+    margin: 6px 0;
+    font-size: 15px;
+}
+
+.card-head {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* Icon text layout */
+.info-row {
+    display: flex;
+    gap: 8px;
+    margin: 5px 0;
+    align-items: center;
+    font-size: 14px;
+}
+
+.info-row i {
+    font-size: 16px;
+    color: #007bff;
+}
+
+/* Button layout */
+.card-buttons {
+    margin-top: 12px;
+}
+
+.card-buttons a {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 8px;
+}
+
+/* --------------------- RESPONSIVE --------------------- */
+
+@media (max-width: 768px) {
+    .table-custom { display: none; }
+    .card-box { display: block; }
+}
+
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4" style="font-weight: bold;">
+        Appointment Requests
+    </h2>
+
+    <!-- DESKTOP TABLE -->
+    <div class="table-container">
+        <table class="table-custom">
+            <tr>
+                <th>#</th>
+                <th>Patient</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Symptoms</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Action</th>
+            </tr>
+
+            {% for a in appointments %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ a.pname }}</td>
+                <td>{{ a.age }}</td>
+                <td>{{ a.gender }}</td>
+                <td>{{ a.date }}</td>
+                <td>{{ a.time }}</td>
+                <td>{{ a.symptoms }}</td>
+
+                <td>
+                    {% if a.status == "Confirmed" %}
+                        <span class="status-tag status-confirmed">Confirmed</span>
+                    {% elif a.status == "Accepted" %}
+                        <span class="status-tag status-accepted">Accepted</span>
+                    {% elif a.status == "Cancelled" %}
+                        <span class="status-tag status-cancelled">Cancelled</span>
+                    {% else %}
+                        <span class="status-tag status-pending">Pending</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if a.payment_status %}
+                        <span class="pay-tag paid">Paid</span>
+                    {% else %}
+                        <span class="pay-tag unpaid">Unpaid</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if a.status == 'Pending' %}
+                        <a href="{% url 'doctor_accept_appointment' a.id %}" class="btn-action btn-accept">Accept</a>
+                        <a href="{% url 'doctor_cancel_appointment' a.id %}" class="btn-action btn-cancel">Cancel</a>
+                    {% else %} --- {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- MOBILE CARD VIEW -->
+    {% for a in appointments %}
+    <div class="card-box">
+        
+        <div class="card-head">{{ a.pname }}</div>
+
+        <div class="info-row"><i class="fa fa-user"></i> Age: {{ a.age }} | {{ a.gender }}</div>
+        <div class="info-row"><i class="fa fa-calendar"></i> {{ a.date }}</div>
+        <div class="info-row"><i class="fa fa-clock"></i> {{ a.time }}</div>
+        <div class="info-row"><i class="fa fa-stethoscope"></i> {{ a.symptoms }}</div>
+
+        <div class="info-row">
+            <i class="fa fa-info-circle"></i>
+            Status:
+            {% if a.status == "Confirmed" %}
+                <span class="status-tag status-confirmed">Confirmed</span>
+            {% elif a.status == "Accepted" %}
+                <span class="status-tag status-accepted">Accepted</span>
+            {% elif a.status == "Cancelled" %}
+                <span class="status-tag status-cancelled">Cancelled</span>
+            {% else %}
+                <span class="status-tag status-pending">Pending</span>
+            {% endif %}
+        </div>
+
+        <div class="info-row">
+            <i class="fa fa-credit-card"></i>
+            Payment:
+            {% if a.payment_status %}
+                <span class="pay-tag paid">Paid</span>
+            {% else %}
+                <span class="pay-tag unpaid">Unpaid</span>
+            {% endif %}
+        </div>
+
+        {% if a.status == 'Pending' %}
+        <div class="card-buttons">
+            <a href="{% url 'doctor_accept_appointment' a.id %}" class="btn-action btn-accept">Accept</a>
+            <a href="{% url 'doctor_cancel_appointment' a.id %}" class="btn-action btn-cancel">Cancel</a>
+        </div>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

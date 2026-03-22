@@ -1,0 +1,44 @@
+{% extends "header.html" %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Appointment History</h2>
+
+  <table class="table table-bordered">
+    <tr style="background:#007bff; color:white;">
+      <th>#</th>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Payment Id</th>
+      <th>Order Id</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+
+    {% for p in products %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ p.name }}</td>
+      <td>₹{{ p.price }}</td>
+      <td>{{ p.payment_id }}</td>
+      <td>{{ p.order_id }}</td>
+      <td>{{ p.payment_date }}</td>
+      <td>
+        {% if p.payment_status %}
+          <span class="text-success font-weight-bold">Paid</span>
+        {% else %}
+          <span class="text-danger font-weight-bold">Unpaid</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="7" class="text-center text-muted">
+        No purchase history found.
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

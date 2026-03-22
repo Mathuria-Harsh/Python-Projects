@@ -1,0 +1,65 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Auto Scroll Script -->
+<script>
+    window.onload = function () {
+        const section = document.getElementById("otp-section");
+        if(section){
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+</script>
+
+<section id="otp-section" class="contact_section layout_padding" style="padding-top: 120px;">
+    <div class="container">
+
+        <div class="heading_container text-center mb-5">
+            <h2>OTP Verification</h2>
+            <p class="mt-2">Enter the OTP sent to your registered email</p>
+        </div>
+
+        <!-- Error / Success Message -->
+        {% if msg %}
+          <div class="alert alert-danger text-center" role="alert" style="padding: 15px; font-size: 16px;">
+            {{ msg }}
+          </div>
+        {% elif success %}
+          <div class="alert alert-success text-center" role="alert" style="padding: 15px; font-size: 16px;">
+            {{ success }}
+          </div>
+        {% endif %}
+
+        <!-- Form Box -->
+        <div class="form_container p-4 shadow-lg rounded-4 bg-white">
+          <form action="{% url 'otp' %}" method="POST" class="form-contact contact_form">
+            {% csrf_token %}
+
+            <!-- OTP Input -->
+            <div class="form-group mb-4">
+              <input class="form-control form-control-lg" 
+                     name="uotp" 
+                     type="number" 
+                     placeholder="Enter OTP" 
+                     required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <button type="submit" 
+                      class="btn btn-primary btn-lg px-5 py-2 rounded-pill shadow-sm"
+                      style="background: #1565c0; border:none;">
+                Verify OTP
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

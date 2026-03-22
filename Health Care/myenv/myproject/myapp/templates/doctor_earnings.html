@@ -1,0 +1,145 @@
+{% extends "dheader.html" %}
+{% block content %}
+
+<style>
+/* Page Title */
+h2 {
+    font-weight: 700;
+}
+
+/* Earnings Box */
+.earn-box {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+
+/* Filter Button Spacing */
+.filter-btns a {
+    margin-right: 8px;
+}
+
+/* Table styling */
+.table thead th {
+    background: #343a40;
+    color: white;
+}
+
+/* Badge styling */
+.badge-info {
+    background-color: #17a2b8 !important;
+}
+
+.badge-primary {
+    background-color: #007bff !important;
+}
+
+</style>
+
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Doctor Earnings</h2>
+
+    <!-- Total Earnings Box -->
+    <div class="earn-box mb-4">
+        Total Earnings: <span style="color:#007bff;">₹{{ total }}</span>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-btns mb-3">
+        <a href="?filter=today" class="btn btn-info btn-sm">Today</a>
+        <a href="?filter=month" class="btn btn-warning btn-sm">Last Month</a>
+        <a href="?filter=year" class="btn btn-success btn-sm">Last Year</a>
+        <a href="?download=true" class="btn btn-primary btn-sm">Download CSV</a>
+    </div>
+
+    <!-- Chart Canvas -->
+    <canvas id="earningsChart" height="90" class="mb-4"></canvas>
+
+    <!-- Earnings Table -->
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Category / Product</th>
+                <th>Amount</th>
+                <th>Payment ID</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in combined %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+
+                <!-- Type Badges -->
+                <td>
+                    {% if row.type == "Appointment" %}
+                        <span class="badge badge-info">Appointment</span>
+                    {% else %}
+                        <span class="badge badge-primary">Product</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ row.name }}</td>
+                <td>{{ row.category }}</td>
+                <td>₹{{ row.amount }}</td>
+                <td>{{ row.payment_id }}</td>
+                <td>{{ row.date }}</td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No Payments Found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('earningsChart').getContext('2d');
+
+const labels = [{% for row in combined %}'{{ row.date }}',{% endfor %}];
+const values = [{% for row in combined %}{{ row.amount }},{% endfor %}];
+const colors = [
+    {% for row in combined %}
+        {% if row.type == "Appointment" %}
+            'rgba(54, 162, 235, 0.7)',
+        {% else %}
+            'rgba(255, 99, 132, 0.7)',
+        {% endif %}
+    {% endfor %}
+];
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Earnings",
+            data: values,
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+    }
+});
+</script>
+
+{% endblock %}

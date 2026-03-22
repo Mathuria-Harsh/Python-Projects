@@ -1,0 +1,142 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+    
+
+    <!-- ✅ Success / Error Message -->
+    {% if msg_error %}
+      <div class="alert alert-danger text-center" role="alert" style="padding: 15px;">
+        {{ msg_error }}
+      </div>
+    {% elif msg_success %}
+      <div class="alert alert-success text-center" role="alert" style="padding: 15px;">
+        {{ msg_success }}
+      </div>
+    {% endif %}
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-8">
+        <div class="form_container contact-form shadow p-4 rounded" style="background: #f9f9f9;">
+          
+          <form class="form-contact contact_form" action="{% url 'patient_profile' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group text-center" style="font-weight:bold;" >
+              <h2>PROFILE</h2>
+            </div>
+            <!-- ✅ USER TYPE with custom CSS -->
+            <div class="form-group mb-3">
+              <label for="usertype" style="font-weight:600;">User Type</label>
+              <input 
+                class="form-control" 
+                name="usertype" 
+                id="usertype" 
+                type="text" 
+                value="{{ user.usertype }}" 
+                readonly 
+                style="background-color: #eef3ff; border: 1px solid #b3c6ff; color:#003366; font-weight:500;"
+              >
+            </div>
+
+            <!-- ✅ NAME -->
+            <div class="form-group mb-3">
+              <label for="name" style="font-weight:600;">Name</label>
+              <input 
+                class="form-control" 
+                name="name" 
+                id="name" 
+                type="text" 
+                placeholder="Enter your name" 
+                value="{{ user.name }}" 
+                required>
+            </div>
+
+            <!-- ✅ EMAIL -->
+            <div class="form-group mb-3">
+              <label for="email" style="font-weight:600;">Email</label>
+              <input 
+                class="form-control" 
+                name="email" 
+                id="email" 
+                type="email" 
+                value="{{ user.email }}" 
+                readonly 
+                required>
+            </div>
+
+            <!-- ✅ MOBILE -->
+            <div class="form-group mb-4">
+              <label for="mno" style="font-weight:600;">Mobile Number</label>
+              <input 
+                class="form-control" 
+                name="mno" 
+                id="mno" 
+                type="tel" 
+                value="{{ user.mno }}" 
+                readonly 
+                required>
+            </div>
+
+            <!-- ✅ PROFILE IMAGE PREVIEW + UPDATE -->
+            <div class="text-center mb-3">
+              {% if user.image %}
+                <img 
+                  id="preview" 
+                  src="{{ user.image.url }}" 
+                  alt="Profile Image" 
+                  height="120px" 
+                  style="border-radius:50%; border:2px solid #ccc; object-fit:cover;">
+              {% else %}
+                <img 
+                  id="preview" 
+                  src="{% static 'images/default-avatar.png' %}" 
+                  alt="Default Image" 
+                  height="120px" 
+                  style="border-radius:50%; border:2px solid #ccc;">
+              {% endif %}
+            </div>
+
+            <div class="form-group text-center mb-4">
+              <input 
+                class="form-control" 
+                name="image" 
+                type="file" 
+                accept="image/*"
+                onchange="previewImage(event)" 
+                style="max-width:250px; margin:auto;">
+            </div>
+
+            <!-- ✅ SUBMIT -->
+            <div class="form-group text-center">
+              <button type="submit" class="btn btn-primary px-4 py-2" style="border-radius: 8px;">
+                Update Profile
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ✅ Preview Script -->
+<script>
+function previewImage(event) {
+  var reader = new FileReader();
+  reader.onload = function() {
+    var output = document.getElementById('preview');
+    output.src = reader.result;
+  }
+  reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+
+{% endblock %}
+
+
+

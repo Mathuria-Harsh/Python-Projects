@@ -1,0 +1,96 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment</title>
+
+</head>
+<body style="
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #e0f2ff, #ffffff);
+  min-height: 100vh;
+  width: 100%;
+">
+
+  <div style="max-width:900px; margin:40px auto; background:#ffffff; border-radius:16px; box-shadow:0 8px 24px rgba(30,40,50,0.12); overflow:hidden; padding:100px 150px;">
+
+    <div style="background:linear-gradient(90deg,#2b8cff,#6dd7ff); padding:20px 24px; color:#fff; text-align:center;">
+      <h1 style="margin:0; font-size:22px; font-weight:700; letter-spacing:0.3px;">Book Appointment</h1>
+      <p style="margin:6px 0 0; opacity:0.95; font-size:13px;">Enter Details</p>
+    </div>
+
+    {% if msg %}
+        <div class="alert alert-danger" role="alert" style="padding: 20px;">
+            {{msg}}
+        </div>
+      {% endif %}
+
+    <form class="form-contact contact_form" action="{% url 'patient_book_appointment' pk %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Full Name</span>
+        <input type="text" name="pname" required placeholder="Enter your name" style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;" />
+      </label>
+
+       <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Email</span>
+        <input type="email" name="email" value="{{ user.email }}" placeholder="patient@example.com" style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;" readonly required />
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Contact</span>
+        <input type="tel" name="mno" value="{{ user.mno }}" readonly required placeholder="+91 98765 43210" style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;" />
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Age</span>
+        <input type="number" name="age" min="0" max="120" required placeholder="age" style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;" />
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Address</span>
+        <textarea name="paddress" rows="4" placeholder="Enter Your address" style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;"></textarea>
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Gender</span>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label style="font-size:14px;"><input type="radio" name="gender" value="Male" checked style="margin-right:6px;">Male</label>
+          <label style="font-size:14px;"><input type="radio" name="gender" value="Female" style="margin-right:6px;">Female</label>
+          <label style="font-size:14px;"><input type="radio" name="gender" value="Other" style="margin-right:6px;">Other</label>
+        </div>
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Date</span>
+        <input type="date" name="date" required style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;" />
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Time</span>
+        <input type="time" name="time" required style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;" />
+      </label>
+
+      <label style="display:flex; flex-direction:column;">
+        <span style="font-size:13px; margin-bottom:6px;">Symptoms</span>
+        <textarea name="symptoms" rows="4" placeholder="Brief description..." style="padding:10px 12px; border:1px solid #d6dce6; border-radius:8px; font-size:14px;"></textarea>
+      </label>
+
+      <div style="display:flex; gap:12px; justify-content:center; margin-top:10px;">
+        <button type="submit" style="padding:10px 16px; border-radius:10px; border:none; background:#2b8cff; color:#fff; font-weight:600; cursor:pointer; box-shadow:0 6px 16px rgba(43,140,255,0.18);">Book Appointment</button>
+        <button type="reset" style="padding:10px 14px; border-radius:10px; border:1px solid #cfd8e6; background:transparent; color:#333; cursor:pointer;">Reset</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
+
+{% endblock %}

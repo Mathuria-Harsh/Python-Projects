@@ -1,0 +1,196 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Signup Section -->
+<section class="contact_section layout_padding" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); min-height: 100vh; display: flex; align-items: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <div class="text-center mb-4">
+                <h2 style="font-weight: 700; color: #007bff;">Create Your Account</h2>
+                <p class="text-muted">Join us and get started today</p>
+        </div>
+        {% if msg %}
+          <div class="alert alert-danger text-center" role="alert" style="padding: 15px; font-size: 16px;">
+            {{msg}}
+          </div>
+        {% elif success %}
+          <div class="alert alert-success text-center" role="alert" style="padding: 15px; font-size: 16px;">
+            {{success}}
+          </div>
+        {% endif %}
+      
+    
+        <div class="form_container p-4 shadow-lg rounded-4 bg-white">
+          <form class="form-contact contact_form" action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- USER TYPE -->
+            <div class="form-group mb-4">
+              <label class="form-label fw-bold">Select Usertype</label>
+              <select class="form-select" name="usertype" required>
+                <option value="" disabled selected>Select Usertype</option>
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+              </select>
+            </div>
+
+            <!-- NAME -->
+            <div class="form-group mb-3">
+              <input class="form-control form-control-lg" name="name" type="text" placeholder="Enter Full Name" required>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-group mb-3">
+              <input class="form-control form-control-lg" name="email" type="email" placeholder="Enter Email Address" required>
+            </div>
+
+            <!-- MOBILE -->
+            <div class="form-group mb-3">
+              <input class="form-control form-control-lg" name="mno" type="tel" placeholder="Enter Mobile Number" required>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group mb-3 position-relative">
+              <input class="form-control form-control-lg" id="password" name="password" type="password" placeholder="Enter Password" required>
+              <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+            </div>
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="form-group mb-4 position-relative">
+              <input class="form-control form-control-lg" id="cpassword" name="cpassword" type="password" placeholder="Confirm Password" required oninput="checkPasswordMatch()">
+              <span class="toggle-password" onclick="togglePassword('cpassword', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+               cursor: pointer; font-size: 20px; color: #007bff;">👁️</span>
+              
+            </div>
+            <small id="passwordMsg" 
+            style="font-weight: 500; display: block; margin-top: -10px; margin-bottom: 15px; text-align: left;"></small>
+
+            <!-- IMAGE UPLOAD -->
+            <div class="form-group mb-3">
+              <label class="form-label fw-bold">Upload Profile Image</label>
+              <input class="form-control" id="image" name="image" type="file" accept="image/*" onchange="previewImage(event)" required>
+            </div>
+
+            <!-- IMAGE PREVIEW -->
+            <div class="text-center mb-4">
+              <img id="preview" src="#" alt="Image Preview"
+                   style="display:none; width:150px; height:150px; border-radius:50%; object-fit:cover; border:3px solid #90caf9; transition: transform 0.3s ease;" />
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5 py-2 rounded-pill shadow-sm" style="background: #1565c0; border:none;">
+                Signup
+              </button>
+            </div>
+
+            <div class="text-center mt-3">
+              <p style="color:#555;">Already have an account? 
+                <a href="{% url 'login' %}" style="color:#1565c0; text-decoration:none;">Login here</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JS for Image Preview, Password Match, and Show/Hide -->
+<script>
+  // Image Preview
+  function previewImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('preview');
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = "block";
+      };
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      preview.src = "#";
+      preview.style.display = "none";
+    }
+  }
+
+  // Password Match Validation
+  function checkPasswordMatch() {
+    const password = document.getElementById("password").value;
+    const cpassword = document.getElementById("cpassword").value;
+    const msg = document.getElementById("passwordMsg");
+
+    if (cpassword === "") {
+      msg.textContent = "";
+      return;
+    }
+
+    if (password === cpassword) {
+      msg.textContent = "✅ Passwords match";
+      msg.style.color = "green";
+    } else {
+      msg.textContent = "❌ Passwords do not match";
+      msg.style.color = "red";
+    }
+  }
+
+  // Show/Hide Password Toggle
+  function togglePassword(fieldId, icon) {
+    const field = document.getElementById(fieldId);
+    if (field.type === "password") {
+      field.type = "text";
+      icon.textContent = "🙈";
+    } else {
+      field.type = "password";
+      icon.textContent = "👁️";
+    }
+  }
+</script>
+
+<!-- Extra CSS for Eye Icon -->
+<style>
+  .position-relative {
+    position: relative;
+  }
+  .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 22px;
+    color: #555;
+    user-select: none;
+  }
+  .toggle-password:hover {
+    color: #1565c0;
+  }
+</style>
+
+<script>
+  // Page load hone par form tak scroll
+  window.addEventListener("load", function() {
+    const formSection = document.querySelector(".form_container");
+    if (formSection) {
+      formSection.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+</script>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

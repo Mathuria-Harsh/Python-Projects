@@ -1,0 +1,187 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Login Section -->
+<section class="contact_section layout_padding" 
+         style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); min-height: 100vh; display: flex; align-items: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        
+        <div class="form_container p-4 shadow-lg rounded-4 bg-white">
+          
+          <!-- Heading Inside Form -->
+          <div class="text-center mb-4">
+            <h2 style="font-weight: 700; color: #007bff;">Login to Your Account</h2>
+            <p class="text-muted">Welcome back! Please enter your credentials.</p>
+          </div>
+
+          {% if msg %}
+            <div class="alert alert-danger text-center" role="alert" style="padding: 15px;">
+              {{msg}}
+            </div>
+          {% elif success %}
+            <div class="alert alert-success text-center" role="alert" style="padding: 15px;">
+              {{success}}
+            </div>
+          {% endif %}
+
+          <form class="form-contact contact_form" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+
+            <!-- EMAIL -->
+            <div class="form-group mb-3">
+              <input class="form-control form-control-lg" 
+                     name="email" 
+                     type="email" 
+                     placeholder="Enter Email Address" 
+                     required>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group mb-4 position-relative">
+              <input class="form-control form-control-lg" 
+                     id="password" 
+                     name="password" 
+                     type="password" 
+                     placeholder="Enter Password" 
+                     required>
+              <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="text-center">
+              <button type="submit" 
+                      class="btn btn-primary btn-lg px-5 py-2 rounded-pill shadow-sm" 
+                      style="background: #1565c0; border:none;">
+                Login
+              </button>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="text-center mt-3">
+              <a href="{% url 'fpass' %}" 
+                 style="color: #1565c0; font-size: smaller; text-decoration: underline;">
+                 Forgot Password?
+              </a>
+            </div>
+
+            <!-- Signup Redirect -->
+            <div class="text-center mt-3">
+              <p style="color:#555;">Don't have an account? 
+                <a href="{% url 'signup' %}" style="color:#1565c0; text-decoration:none;">Signup here</a>
+              </p>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JS for Password Toggle -->
+<script>
+  // 👁️ Show/Hide Password Toggle
+  function togglePassword(fieldId, icon) {
+    const field = document.getElementById(fieldId);
+    if (field.type === "password") {
+      field.type = "text";
+      icon.textContent = "🙈";
+    } else {
+      field.type = "password";
+      icon.textContent = "👁️";
+    }
+  }
+
+  // 🧭 Auto-scroll to form
+  window.addEventListener("load", function() {
+    const formSection = document.querySelector(".form_container");
+    if (formSection) {
+      formSection.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+</script>
+
+<!-- CSS for Eye Icon -->
+<style>
+  .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 22px;
+    color: #555;
+    user-select: none;
+  }
+  .toggle-password:hover {
+    color: #1565c0;
+  }
+</style>
+
+{% endblock %}
+
+
+
+
+
+
+
+{% comment %} {% extends 'header.html' %}
+{% load static %}
+{% block content %}
+  </div>
+
+  <!-- contact section -->
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Login
+        </h2>
+      </div>
+
+      {% if msg %}
+        <div class="alert alert-danger" role="alert" style="padding: 20px;">
+            {{msg}}
+        </div>
+      {% endif %}
+        
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container contact-form">
+            <!-- ONLY ONE FORM -->
+            <form class="form-contact contact_form" action="{% url 'login' %}" method="post">
+              {% csrf_token %}
+
+              <div class="row">
+                  <div class="col-sm-7">
+                      <div class="form-group">
+                          <input class="form-control valid" name="email" type="email" placeholder="Enter email address" required>
+                      </div>
+                  </div>
+
+                  <div class="col-7">
+                      <div class="form-group">
+                          <input class="form-control" name="password" type="password" placeholder="Enter Password" required>
+                      </div>
+                  </div>
+
+              </div>
+              <a href="{%url 'fpass'%}"  style="color: blue; font-size: smaller;text-decoration: underline;">Forgot-Password</a>
+              <div class="form-group mt-3">
+                  <button type="submit" class="button button-contactForm boxed-btn">Login</button>
+              </div>
+            </form>
+            
+            <!-- END FORM -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end contact section -->
+
+{% endblock %} {% endcomment %}

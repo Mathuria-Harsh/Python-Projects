@@ -1,0 +1,85 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+</div>
+
+<!-- Auto Scroll Script -->
+<script>
+    window.onload = function () {
+        const section = document.getElementById("newpass-section");
+        if(section){
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+</script>
+
+<section id="newpass-section" class="contact_section layout_padding" 
+         style="padding-top: 120px; background: #f5f7fa; min-height: 100vh;">
+    
+    <div class="container">
+        
+        <!-- Heading Section -->
+        <div class="heading_container mb-5" style="text-align:center;">
+            <h2 style="font-size: 36px; font-weight: 700; color: #2c3e50;">
+                Change Password
+            </h2>
+            <p style="color:#555; margin-top:10px;">
+                Enter your details to update password
+            </p>
+        </div>
+
+        <!-- Error Message -->
+        {% if msg %}
+            <div class="alert alert-danger text-center" role="alert" 
+                 style="padding: 15px; font-size: 16px;">
+                {{ msg }}
+            </div>
+        {% endif %}
+
+        <!-- Form Section -->
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+
+                <div class="form_container p-4 shadow-lg rounded-4 bg-white">
+
+                    <form class="form-contact contact_form" 
+                          action="{% url 'changepass' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group mb-3">
+                            <input class="form-control form-control-lg" 
+                                   name="opassword" type="password"
+                                   placeholder="Enter Old Password" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <input class="form-control form-control-lg" 
+                                   name="npassword" type="password"
+                                   placeholder="Enter New Password" required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <input class="form-control form-control-lg" 
+                                   name="ncpassword" type="password"
+                                   placeholder="Confirm New Password" required>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit"
+                                class="btn btn-primary btn-lg px-5 py-2 rounded-pill shadow-sm"
+                                style="background: #1565c0; border:none;">
+                                CHANGE PASSWORD
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

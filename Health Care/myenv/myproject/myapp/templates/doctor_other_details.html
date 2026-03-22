@@ -1,0 +1,149 @@
+{% extends "dheader.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+  .doctor-profile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    padding: 60px 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin: 50px auto;
+    max-width: 1000px;
+  }
+
+  .doctor-profile .img-box {
+    flex: 1 1 350px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .doctor-profile .img-box img {
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 6px solid #3b82f6;
+    transition: transform 0.4s ease;
+  }
+
+  .doctor-profile .img-box img:hover {
+    transform: scale(1.05);
+  }
+
+  .doctor-info {
+    flex: 1 1 400px;
+    padding: 20px 40px;
+  }
+
+  .doctor-info h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 15px;
+  }
+
+  .doctor-info p {
+    font-size: 17px;
+    margin: 8px 0;
+    color: #444;
+  }
+
+  .doctor-info p span {
+    font-weight: bold;
+    color: #000;
+  }
+
+  .rating {
+    margin-top: 10px;
+  }
+
+  .rating i {
+    color: #facc15;
+    font-size: 22px;
+    margin-right: 2px;
+  }
+
+  .social-icons {
+    margin-top: 20px;
+  }
+
+  .social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 22px;
+    color: #3b82f6;
+    transition: color 0.3s;
+  }
+
+  .social-icons a:hover {
+    color: #1e40af;
+  }
+
+  .book-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+  }
+
+  .book-btn:hover {
+    background: #1e3a8a;
+  }
+
+  .no-booking {
+    color: #888;
+    font-style: italic;
+    margin-top: 25px;
+  }
+</style>
+
+<section class="doctor-profile container">
+  <div class="img-box">
+    <img src="{{ doctor.dimage.url }}" alt="Doctor Image">
+  </div>
+
+  <div class="doctor-info">
+    <h2>{{ doctor.dname }}</h2>
+    <div class="rating">
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star-o"></i>
+    </div>
+    <p><span>Qualification:</span> {{ doctor.qfc }}</p>
+    <p><span>Category:</span> {{ doctor.cchoice }}</p>
+    <p><span>Experience:</span> {{ doctor.exp }} years</p>
+    <p><span>Charges:</span> ₹{{ doctor.charges }}/hr</p>
+    <p><span>Address:</span> {{ doctor.address }}</p>
+
+    <div class="social-icons">
+      <a href="#"><i class="fa fa-facebook"></i></a>
+      <a href="#"><i class="fa fa-twitter"></i></a>
+      <a href="#"><i class="fa fa-linkedin"></i></a>
+      <a href="#"><i class="fa fa-instagram"></i></a>
+    </div>
+
+    {% if user.usertype == "patient" %}
+      <a href="{% url 'patient_book_appointment' pk=doctor.pk %}" class="book-btn">Book Appointment</a>
+    {% else %}
+      <p class="no-booking">You are logged in as a Doctor — booking not available.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
+
+
+
+

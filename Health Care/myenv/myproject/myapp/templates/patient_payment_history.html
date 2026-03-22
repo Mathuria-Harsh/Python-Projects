@@ -1,0 +1,72 @@
+{% extends "header.html" %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Appointment Payment History</h2>
+
+  <table class="table table-bordered">
+    <tr style="background:#007bff; color:white;">
+      <th>#</th>
+      <th>Payment ID</th>
+      <th>Amount (₹)</th>
+      <th>Status</th>
+      <th>Appointment Date</th>
+      <th>Appointment Time</th>
+    </tr>
+
+    {% for p in payments %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ p.payment_id }}</td>
+      <td>{{ p.doctor.charges }}</td>
+      <td>
+        {% if p.payment_status %}
+            <span class="text-success font-weight-bold">Paid</span>
+        {% else %}
+            <span class="text-danger font-weight-bold">Unpaid</span>
+        {% endif %}
+      </td>
+      <td>{{ p.date }}</td>
+      <td>{{ p.time }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2 class="text-center mb-4">Product Payment History</h2>
+
+    <table class="table table-bordered">
+        <tr style="background:#28a745; color:white;">
+            <th>#</th>
+            <th>Product</th>
+            <th>Price (₹)</th>
+            <th>Payment ID</th>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for pr in products %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ pr.name }}</td>
+            <td>{{ pr.price }}</td>
+            <td>{{ pr.payment_id }}</td>
+            <td>{{ pr.order_id }}</td>
+            <td>{{ pr.payment_date }}</td>
+            <td>
+                {% if pr.payment_status %}
+                    <span class="text-success font-weight-bold">Paid</span>
+                {% else %}
+                    <span class="text-danger font-weight-bold">Unpaid</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center text-muted">No Product Payments Found</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
