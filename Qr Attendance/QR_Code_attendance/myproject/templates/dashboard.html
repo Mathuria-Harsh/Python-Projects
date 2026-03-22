@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<center><h3 class="mb-4">Machine Check Dashboard</h3></center>
+
+
+{% if records %}
+<div class="alert alert-danger">
+    <strong>⚠ Machines needing recheck:</strong>
+    <ul>
+        {% for record in records %}
+            {% if record.timer_done %}
+                <li>
+                    {{ record.machine }} (Employee: {{ record.employee.name }})
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr {% if record.timer_done %} class="table-danger" {% endif %}>
+            <th>Employee Name</th>
+            <th>Employee ID</th>
+            <th>Machine Check</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Checks</th>
+            <th>Timer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.employee.name }}</td>
+            <td>{{ record.employee.employee_id }}</td>
+            <td>{{ record.machine }}</td>
+            <td>{{ record.date }}</td>
+            <td>{{ record.time }}</td>
+            <td>
+                {% if record.check_count < 4 %}
+                    <span class="badge bg-warning text-dark">
+                        {{ record.check_count }}/4
+                    </span>
+                {% else %}
+                    <span class="badge bg-success">
+                        {{ record.check_count }}/4
+                    </span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if record.timer_done %}
+                    <span class="badge bg-danger">⛔ Recheck Required</span>
+                {% else %}
+                    <span class="timer" data-seconds="{{ record.remaining_seconds|default:0 }}">
+                        00:00:00
+                    </span>
+                {% endif %}
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) seconds = 0;
+
+    let h = Math.floor(seconds / 3600);
+    let m = Math.floor((seconds % 3600) / 60);
+    let s = seconds % 60;
+
+    return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+function startTimers() {
+    document.querySelectorAll('.timer').forEach(function(el) {
+        let seconds = parseInt(el.dataset.seconds) || 0;
+
+        function update() {
+            if (seconds <= 0) {
+                el.innerHTML = "⛔ Recheck Required";
+                el.classList.add("text-danger", "fw-bold");
+                return;
+            }
+
+            el.innerHTML = formatTime(seconds);
+            seconds--;
+        }
+
+        update();
+        setInterval(update, 1000);
+    });
+}
+
+startTimers();
+
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Employees{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">Employee Management</h3>
+
+{% if message %}
+<div class="alert alert-info">{{ message }}</div>
+{% endif %}
+
+<div class="card p-4 shadow mb-4">
+    <h5>Add Employee</h5>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            
+            <div class="col-md-4">
+                <input type="text" name="employee_id" class="form-control" placeholder="Employee ID" required>
+            </div>
+            
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">
+            Add Employee
+        </button>
+    </form>
+</div>
+
+<div class="card p-4 shadow">
+    <h5>Employee List</h5>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Employee ID</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in employees %}
+            <tr>
+                <td>{{ emp.name }}</td>
+                <td>{{ emp.employee_id }}</td>
+                <td>
+                    <a href="/delete-employee/{{ emp.id }}/" class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+

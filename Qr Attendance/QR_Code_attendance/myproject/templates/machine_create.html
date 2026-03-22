@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate QR{% endblock %}
+
+{% block content %}
+
+<div class="col-md-6 mx-auto">
+
+    <div class="card shadow-lg rounded-4">
+        <div class="card-body p-4">
+
+            <h3 class="text-center mb-4">Generate Machine QR</h3>
+
+            {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Machine Name</label>
+                    <input type="text" name="machine_name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Machine Code</label>
+                    <input type="text" name="machine_code" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Generate QR Code
+                </button>
+            </form>
+
+            {% if machine %}
+            <hr>
+            <div class="text-center">
+                <img src="{{ machine.qr_image.url }}" width="200">
+                <br><br>
+                <a href="{{ machine.qr_image.url }}" download class="btn btn-success">
+                    Download QR
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h4 class="mb-3">Generated QR List</h4>
+
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Machine Name</th>
+                    <th>Machine Code</th>
+                    <th>QR Preview</th>
+                    <th>Download</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for machine in machines %}
+                <tr>
+                    <td>{{ machine.machine_name }}</td>
+                    <td>{{ machine.machine_code }}</td>
+                    <td>
+                        {% if machine.qr_image %}
+                            <img src="{{ machine.qr_image.url }}" width="80">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if machine.qr_image %}
+                            <a href="{{ machine.qr_image.url }}" download class="btn btn-success btn-sm">
+                                Download
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/delete-machine/{{ machine.id }}/" 
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No machines added yet
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

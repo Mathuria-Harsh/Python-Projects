@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Machine Check Dashboard</h2>
+
+<table>
+    <tr>
+        <th>Employee</th>
+        <th>Machine</th>
+        <th>Date</th>
+        <th>Time</th>
+    </tr>
+
+    {% for record in records %}
+    <tr>
+        <td>{{ record.employee.employee_id }}</td>
+        <td>{{ record.machine.machine_name }}</td>
+        <td>{{ record.date }}</td>
+        <td>{{ record.time }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>
