@@ -7,16 +7,14 @@
 <center><h3 class="mb-4">Machine Check Dashboard</h3></center>
 
 
-{% if records %}
+{% if recheck_records %}
 <div class="alert alert-danger">
     <strong>⚠ Machines needing recheck:</strong>
     <ul>
-        {% for record in records %}
-            {% if record.timer_done %}
-                <li>
-                    {{ record.machine }} (Employee: {{ record.employee.name }})
-                </li>
-            {% endif %}
+        {% for record in recheck_records %}
+            <li>
+                {{ record.machine }} ({{ record.employee.name }})
+            </li>
         {% endfor %}
     </ul>
 </div>
@@ -24,7 +22,7 @@
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
-        <tr {% if record.timer_done %} class="table-danger" {% endif %}>
+        <tr class="{% if record.timer_done %}table-danger{% endif %}">
             <th>Employee Name</th>
             <th>Employee ID</th>
             <th>Machine Check</th>

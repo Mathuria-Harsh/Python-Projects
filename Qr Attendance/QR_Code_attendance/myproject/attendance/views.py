@@ -105,10 +105,9 @@ def dashboard(request):
 
     records = list(latest_records.values())
 
-    # Timer + Count logic
+    # Timer + Count logic (It will run first)
     for record in records:
 
-        # Timer logic
         last_time = timezone.make_aware(
             timezone.datetime.combine(record.date, record.time)
         )
@@ -116,6 +115,7 @@ def dashboard(request):
         next_check_time = last_time + timedelta(hours=2)
         remaining_time = next_check_time - now
 
+        # Timer status
         if remaining_time.total_seconds() > 0:
             record.remaining_seconds = int(remaining_time.total_seconds())
             record.timer_done = False
@@ -124,16 +124,18 @@ def dashboard(request):
             record.timer_done = True
 
         # Count logic
-        count = MachineCheck.objects.filter(
+        record.check_count = MachineCheck.objects.filter(
             employee=record.employee,
             machine=record.machine,
             date=today
         ).count()
 
-        record.check_count = count
+    
+    recheck_records = [record for record in records if record.timer_done]
 
     return render(request, 'dashboard.html', {
-        'records': records
+        'records': records,
+        'recheck_records': recheck_records
     })
             
 
